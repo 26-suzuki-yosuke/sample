@@ -11,11 +11,36 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group('admin/profile', function() {
-   Route::get('create', 'app/Http/Controllers/Admin/ProfileController@create'); 
-   Route::get('edit', 'app/Http/Controllers/Admin/ProfileController@edit') ;
+/*
+Route::get('admin/news/create', function () {
+    return view('admin/news/create');
 });
+*/
+
+Route::prefix('admin/profile')->group(function() {
+   Route::get('create', 'Admin\ProfileController@add')->middleware('auth'); 
+   Route::get('edit', 'Admin\ProfileController@edit') ->middleware('auth');
+});
+
+Route::get('admin/news/create', 'Admin\NewsController@add')->middleware('auth');
+
+/*
+Route::group(['prefix' => 'admin'], function() {
+    Route::get('news/create', 'Admin\NewsController@add');
+});
+*/
+
+/*
+Route::get('/', function () {
+    return view('admin/news/create');
+});
+*/
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
